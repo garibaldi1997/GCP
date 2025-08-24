@@ -1,6 +1,5 @@
-const CACHE_NAME = 'salud-app-v2'; // Cambia 'v2' cada vez que actualices la app
+const CACHE_NAME = 'salud-app-cache-v1';
 const urlsToCache = [
-  '/', // La raíz de tu app
   'index.html',
   'manifest.json',
   'service-worker.js',
@@ -13,22 +12,19 @@ const urlsToCache = [
   'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js'
 ];
 
-// Al instalar el service worker, guarda todos los archivos en caché
-self.addEventListener('install', (event) => {
+self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('Cacheando archivos para uso offline...');
+      .then(cache => {
         return cache.addAll(urlsToCache);
       })
   );
 });
 
-// Cuando el teléfono intenta cargar un archivo, lo busca primero en la caché
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
-      .then((response) => {
+      .then(response => {
         if (response) {
           return response;
         }
